@@ -1,86 +1,190 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <div class="container-fluid">
-    <!-- Logo -->
-    <a class="navbar-brand" href="/">
-      <img src="assets/logo.png" alt="Logo" height="40" class="d-inline-block align-text-top">
-    </a>
+<!-- Navigation Section - Completely separate from content -->
+<div class="navigation-wrapper">
+  <!-- Main Navbar -->
+  <nav class="navbar navbar-expand-lg">
+    <div class="container">
+      <!-- Logo -->
+      <a class="navbar-brand" href="/">
+        <svg xmlns="http://www.w3.org/2000/svg" width="120" height="40" viewBox="0 0 400 150">
+          <!-- Shopping Cart Icon -->
+          <g fill="none" stroke="#6c55f9" stroke-width="8">
+            <!-- Cart body -->
+            <path d="M50 30 h80 v60 h-80 l-20 30 h100" />
+            <!-- Cart handle -->
+            <path d="M50 30 l-20 -20" />
+            <!-- Wheels -->
+            <circle cx="50" cy="120" r="10" fill="#6c55f9" />
+            <circle cx="90" cy="120" r="10" fill="#6c55f9" />
+          </g>
+        
+          <!-- Text: Jadhav store -->
+          <g fill="#6c55f9" font-family="'Montserrat', Arial, sans-serif" font-weight="bold">
+            <!-- Jadhav -->
+            <text x="150" y="70" font-size="60">Jadhav</text>
+            <!-- store -->
+            <text x="150" y="120" font-size="40">store</text>
+          </g>
+        </svg>
+      </a>
 
-    <!-- Toggler Button -->
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
+      <!-- Toggler Button -->
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" 
+              aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <i class="bi bi-list"></i>
+      </button>
 
-    <!-- Navbar Content -->
-    <div class="collapse navbar-collapse" id="navbarNav">
-      <!-- Left Side Links -->
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item">
-          <a class="nav-link" routerLink="/" routerLinkActive="active">Home</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" routerLink="/products" routerLinkActive="active">Products</a>
-        </li>
-      </ul>
+      <!-- Navbar Content -->
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <!-- Left Side Links -->
+        <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+              <i class="bi bi-house"></i> Home
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/products" routerLinkActive="active">
+              <i class="bi bi-grid"></i> Products
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/deals" routerLinkActive="active">
+              <i class="bi bi-tag"></i> Deals
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/new-arrivals" routerLinkActive="active">
+              <i class="bi bi-lightning"></i> New Arrivals
+            </a>
+          </li>
+        </ul>
 
-      <!-- Search Bar -->
-      <form class="d-flex mx-3 position-relative" (submit)="onSearch($event)">
-        <input #searchInput
-       class="form-control me-2"
-       type="search"
-       placeholder="Search products..."
-       aria-label="Search"
-       [(ngModel)]="searchQuery"
-       (focus)="showCategories = true"
-       name="searchQuery"
-       (input)="filterProducts()"
-       (blur)="hideDropdownDelayed()">
-        <button class="btn btn-outline-primary" type="submit">Search</button>
+        <!-- Search Bar -->
+        <form class="search-form d-flex position-relative" (submit)="onSearch($event)">
+          <input #searchInput
+            class="form-control me-2"
+            type="search"
+            placeholder="Search products..."
+            aria-label="Search"
+            [(ngModel)]="searchQuery"
+            (focus)="showCategories = true"
+            name="searchQuery"
+            (input)="filterProducts()"
+            (blur)="hideDropdownDelayed()">
+          <button class="btn btn-search" type="submit">
+            <i class="bi bi-search"></i>
+          </button>
 
-        <!-- Dropdown for Categories -->
-        <!-- Dropdown for Categories -->
-<div *ngIf="showCategories && searchQuery === ''" class="dropdown-menu show position-absolute w-100">
-  <a *ngFor="let category of categories"
-     class="dropdown-item"
-     (click)="selectCategory(category); $event.preventDefault()">
-    {{ category }}
-  </a>
-</div>
+          <!-- Dropdown for Categories -->
+          <div *ngIf="showCategories && searchQuery === ''" class="dropdown-menu show position-absolute w-100">
+            <a *ngFor="let category of categories"
+              class="dropdown-item"
+              (click)="selectCategory(category.name); $event.preventDefault()">
+              <i class="bi bi-tag"></i> {{ category.name }}
+            </a>
+          </div>
 
-<!-- Dropdown for Filtered Products -->
-<div *ngIf="filteredProducts.length > 0" class="dropdown-menu show position-absolute w-100">
-  <a *ngFor="let product of filteredProducts"
-     class="dropdown-item"
-     (click)="selectProduct(product); $event.preventDefault()">
-    {{ product.name }}
-  </a>
-</div>
-      </form>
+          <!-- Dropdown for Filtered Products -->
+          <div *ngIf="filteredProducts.length > 0" class="dropdown-menu show position-absolute w-100">
+            <a *ngFor="let product of filteredProducts"
+              class="dropdown-item"
+              (click)="selectProduct(product); $event.preventDefault()">
+              <i class="bi bi-box"></i> {{ product.name }}
+            </a>
+          </div>
+        </form>
 
-      <!-- Right Side Buttons -->
-      <ul class="navbar-nav d-flex align-items-center">
-        <li class="nav-item">
-          <a class="nav-link" routerLink="/cart" routerLinkActive="active">
-            <i class="bi bi-cart-fill"></i> Cart
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" routerLink="/profile" routerLinkActive="active">
-            <i class="bi bi-person-circle"></i> Profile
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link btn btn-outline-success ms-2" routerLink="/login" routerLinkActive="active">
-            <i class="bi bi-box-arrow-in-right"></i> Login
-          </a>
-        </li>
-      </ul>
+        <!-- Right Side Buttons -->
+        <ul class="navbar-nav nav-icons ms-auto">
+          <li class="nav-item">
+            <a class="nav-link icon-link" routerLink="/wishlist" routerLinkActive="active">
+              <i class="bi bi-heart"></i>
+              <span class="icon-text">Wishlist</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link icon-link" routerLink="/cart" routerLinkActive="active">
+              <i class="bi bi-cart"></i>
+              <span class="cart-badge" *ngIf="(cartService.cartItems$ | async)?.length">
+                {{ getCartItemCount() }}
+              </span>
+              <span class="icon-text">Cart</span>
+            </a>
+          </li>
+          
+          <!-- Show for authenticated users -->
+          <li class="nav-item" *ngIf="authService.isLoggedIn">
+            <div class="dropdown">
+              <a class="nav-link icon-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="bi bi-person-circle"></i>
+                <span class="icon-text">Account</span>
+              </a>
+              <ul class="dropdown-menu dropdown-menu-end user-dropdown">
+                <li><span class="user-name">{{ authService.currentUser?.name }}</span></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" routerLink="/auth/profile"><i class="bi bi-person"></i> My Profile</a></li>
+                <li><a class="dropdown-item" routerLink="/orders"><i class="bi bi-box"></i> My Orders</a></li>
+                <li><a class="dropdown-item" routerLink="/settings"><i class="bi bi-gear"></i> Settings</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><button class="dropdown-item text-danger" (click)="logout()"><i class="bi bi-box-arrow-right"></i> Logout</button></li>
+              </ul>
+            </div>
+          </li>
+          
+          <!-- Show for unauthenticated users -->
+          <li class="nav-item" *ngIf="!authService.isLoggedIn">
+            <a class="nav-link icon-link" routerLink="/auth/login" routerLinkActive="active">
+              <i class="bi bi-box-arrow-in-right"></i>
+              <span class="icon-text">Login</span>
+            </a>
+          </li>
+        </ul>
+      </div>
     </div>
+  </nav>
+
+  <!-- Secondary Navbar (Categories) -->
+  <app-secondary-navbar></app-secondary-navbar>
+</div>
+
+<!-- Mobile menu toggle button -->
+<!-- <button class="mobile-menu-toggle d-lg-none" (click)="toggleMobileMenu()">
+  <i class="bi" [ngClass]="mobileMenuOpen ? 'bi-x-lg' : 'bi-list'"></i>
+</button> -->
+
+<!-- Mobile menu -->
+<!-- <div class="mobile-menu" [class.show]="mobileMenuOpen">
+  <div class="mobile-menu-header">
+    <h5>Categories</h5>
+    <button class="close-menu" (click)="closeMobileMenu()">
+      <i class="bi bi-x-lg"></i>
+    </button>
   </div>
-</nav>
+  <ul class="mobile-category-list">
+    <li *ngFor="let category of categories" class="mobile-category-item">
+      <div class="mobile-category-header" (click)="toggleCategory(category.name)">
+        <span>{{ category.name }}</span>
+        <i class="bi" [ngClass]="activeCategory === category.name ? 'bi-chevron-up' : 'bi-chevron-down'"></i>
+      </div>
+      <div class="mobile-submenu" [class.show]="activeCategory === category.name">
+        <ul>
+          <li *ngFor="let subcategory of getSubcategories(category)">
+            <a [routerLink]="['/category', category.name.toLowerCase(), subcategory]" (click)="closeMobileMenu()">
+              {{ subcategory }}
+            </a>
+          </li>
+        </ul>
+      </div>
+    </li>
+  </ul>
+</div> -->
 
-<!-- Secondary Navbar -->
-<app-secondary-navbar></app-secondary-navbar>
+<!-- Mobile menu overlay -->
+<div class="mobile-menu-overlay" [class.show]="mobileMenuOpen" (click)="closeMobileMenu()"></div>
 
-<div class="main-content">
-  <router-outlet></router-outlet>
+<!-- Main content - completely separate from navigation -->
+<div class="content-wrapper">
+  <main class="main-content">
+    <router-outlet></router-outlet>
+  </main>
 </div>

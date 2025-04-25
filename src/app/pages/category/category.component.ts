@@ -1,16 +1,20 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { ProductService } from '../../services/product.service';
+import { ProductService, Product } from '../../services/product.service';
+import { CommonModule } from '@angular/common';
+import { switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-category',
   standalone: true,
+  imports: [CommonModule],
   templateUrl: './category.component.html', // External HTML file
   styleUrls: ['./category.component.css']   // External CSS file
 })
 export class CategoryComponent implements OnInit {
-  products: any[] = [];
+  products: Product[] = [];
   category: string = '';
+  loading: boolean = true;
 
   constructor(
     private productService: ProductService,
@@ -18,9 +22,15 @@ export class CategoryComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.route.paramMap.subscribe(params => {
-      this.category = params.get('category') || '';
-      this.products = this.productService.getProducts().filter(product => product.category === this.category);
+    this.route.paramMap.pipe(
+      switchMap(params => {
+        this.category = params.get('category') || '';
+        this.loading = true;
+        return this.productService.getProductsByCategory(this.category);
+      })
+    ).subscribe(products => {
+      this.products = products;
+      this.loading = false;
     });
   }
 }

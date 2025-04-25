@@ -1,20 +1,343 @@
 <div class="container mt-4">
-    <h2>{{ subcategory }}</h2>
+  <div class="row">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a routerLink="/">Home</a></li>
+        <li class="breadcrumb-item"><a [routerLink]="['/', category.toLowerCase()]">{{ category }}</a></li>
+        <li class="breadcrumb-item active">{{ subcategory }}</li>
+      </ol>
+    </nav>
+  </div>
+
+  <div class="row">
+    <!-- Title -->
+    <div class="col-12 mb-4">
+      <h1>{{ subcategory }} <small class="text-muted">({{ filteredProducts.length }} products)</small></h1>
+    </div>
+  </div>
+
     <div class="row">
-      <div *ngFor="let product of products" class="col-md-4 mb-4">
+    <!-- Filters Sidebar - Desktop -->
+    <div class="col-lg-3 d-none d-lg-block">
         <div class="card">
-          <img [src]="product.imageUrl" class="card-img-top" alt="{{ product.name }}">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <h5 class="mb-0">Filters</h5>
+          <button class="btn btn-sm btn-outline-secondary" (click)="resetFilters()">Reset</button>
+        </div>
           <div class="card-body">
-            <h5 class="card-title">{{ product.name }}</h5>
-            <p class="card-text">{{ product.description }}</p>
-            <p class="card-text text-primary fw-bold">${{ product.price }}</p>
-            <button (click)="addToCart(product)" class="btn btn-success">Add to Cart</button>
+          <!-- Price Range -->
+          <div class="mb-4">
+            <h6>Price Range</h6>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="price1"
+                     [(ngModel)]="priceFilters.under25" 
+                     (ngModelChange)="applyFilters()">
+              <label class="form-check-label" for="price1">
+                Under $25
+              </label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="price2"
+                     [(ngModel)]="priceFilters.from25to50" 
+                     (ngModelChange)="applyFilters()">
+              <label class="form-check-label" for="price2">
+                $25 to $50
+              </label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="price3"
+                     [(ngModel)]="priceFilters.from50to100" 
+                     (ngModelChange)="applyFilters()">
+              <label class="form-check-label" for="price3">
+                $50 to $100
+              </label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="price4"
+                     [(ngModel)]="priceFilters.over100" 
+                     (ngModelChange)="applyFilters()">
+              <label class="form-check-label" for="price4">
+                Over $100
+              </label>
+            </div>
+          </div>
+          
+          <!-- Ratings -->
+          <div class="mb-4">
+            <h6>Customer Ratings</h6>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="rating4"
+                     [(ngModel)]="ratingFilters.fourStarsAndUp" 
+                     (ngModelChange)="applyFilters()">
+              <label class="form-check-label" for="rating4">
+                <i class="bi bi-star-fill text-warning"></i>
+                <i class="bi bi-star-fill text-warning"></i>
+                <i class="bi bi-star-fill text-warning"></i>
+                <i class="bi bi-star-fill text-warning"></i>
+                <i class="bi bi-star text-warning"></i>
+                & up
+              </label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="rating3"
+                     [(ngModel)]="ratingFilters.threeStarsAndUp" 
+                     (ngModelChange)="applyFilters()">
+              <label class="form-check-label" for="rating3">
+                <i class="bi bi-star-fill text-warning"></i>
+                <i class="bi bi-star-fill text-warning"></i>
+                <i class="bi bi-star-fill text-warning"></i>
+                <i class="bi bi-star text-warning"></i>
+                <i class="bi bi-star text-warning"></i>
+                & up
+              </label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="rating2"
+                     [(ngModel)]="ratingFilters.twoStarsAndUp" 
+                     (ngModelChange)="applyFilters()">
+              <label class="form-check-label" for="rating2">
+                <i class="bi bi-star-fill text-warning"></i>
+                <i class="bi bi-star-fill text-warning"></i>
+                <i class="bi bi-star text-warning"></i>
+                <i class="bi bi-star text-warning"></i>
+                <i class="bi bi-star text-warning"></i>
+                & up
+              </label>
+            </div>
+          </div>
+          
+          <!-- Availability -->
+          <div>
+            <h6>Availability</h6>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="instock"
+                     [(ngModel)]="availabilityFilters.inStock" 
+                     (ngModelChange)="applyFilters()">
+              <label class="form-check-label" for="instock">
+                In Stock
+              </label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="outofstock"
+                     [(ngModel)]="availabilityFilters.outOfStock" 
+                     (ngModelChange)="applyFilters()">
+              <label class="form-check-label" for="outofstock">
+                Out of Stock
+              </label>
+            </div>
           </div>
         </div>
       </div>
     </div>
   
-    <div *ngIf="products.length === 0" class="alert alert-warning">
-      No products found in this subcategory.
+    <!-- Sort and Product Grid -->
+    <div class="col-lg-9">
+      <!-- Sort Options and Mobile Filter Button -->
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+          <button class="btn btn-outline-secondary d-lg-none" data-bs-toggle="modal" data-bs-target="#filtersModal">
+            <i class="bi bi-funnel"></i> Filters
+          </button>
+        </div>
+        <div class="d-flex">
+          <select class="form-select me-2" [(ngModel)]="sortOption" (change)="onSortChange($event)">
+            <option value="featured">Sort by: Featured</option>
+            <option value="price_low">Price: Low to High</option>
+            <option value="price_high">Price: High to Low</option>
+            <option value="rating">Customer Rating</option>
+          </select>
+          <div class="btn-group" role="group">
+            <button type="button" class="btn btn-outline-secondary active">
+              <i class="bi bi-grid"></i>
+            </button>
+            <button type="button" class="btn btn-outline-secondary">
+              <i class="bi bi-list"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Loading Indicator -->
+      <div *ngIf="loading" class="text-center my-5">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+        <p class="mt-2">Loading products...</p>
+      </div>
+
+      <!-- No Products Found Message -->
+      <div *ngIf="!loading && filteredProducts.length === 0" class="alert alert-info" role="alert">
+        <i class="bi bi-info-circle me-2"></i>
+        No products found matching your filters. Please try different filter options.
+      </div>
+
+      <!-- Product Grid -->
+      <div *ngIf="!loading && filteredProducts.length > 0" class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        <div class="col" *ngFor="let product of filteredProducts">
+          <div class="card h-100 product-card">
+            <div class="product-image">
+              <img [src]="product.imageUrl" class="card-img-top" alt="{{ product.name }}">
+              <div class="product-actions">
+                <button class="btn btn-light btn-sm" title="Add to Wishlist">
+                  <i class="bi bi-heart"></i>
+                </button>
+                <button class="btn btn-light btn-sm" title="Quick View">
+                  <i class="bi bi-eye"></i>
+                </button>
+              </div>
+            </div>
+            <div class="card-body d-flex flex-column">
+              <h5 class="card-title text-truncate">{{ product.name }}</h5>
+              <p class="card-text text-truncate">{{ product.description }}</p>
+              <div class="mt-auto">
+                <p class="price mb-2">${{ product.price }}</p>
+                <div class="d-grid gap-2">
+                  <a [routerLink]="['/products', product.id]" class="btn btn-outline-primary btn-sm">Details</a>
+                  <button (click)="addToCart(product)" class="btn btn-primary btn-sm">Add to Cart</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pagination -->
+      <nav aria-label="Page navigation" class="mt-4" *ngIf="!loading && filteredProducts.length > 0">
+        <ul class="pagination justify-content-center">
+          <li class="page-item disabled">
+            <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
+          </li>
+          <li class="page-item active" aria-current="page">
+            <a class="page-link" href="#">1</a>
+          </li>
+          <li class="page-item"><a class="page-link" href="#">2</a></li>
+          <li class="page-item"><a class="page-link" href="#">3</a></li>
+          <li class="page-item">
+            <a class="page-link" href="#">Next</a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+<!-- Mobile Filters Modal -->
+<div class="modal fade" id="filtersModal" tabindex="-1" aria-labelledby="filtersModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="filtersModalLabel">Filters</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <!-- Price Range -->
+        <div class="mb-4">
+          <h6>Price Range</h6>
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="mobilePrice1"
+                   [(ngModel)]="priceFilters.under25" 
+                   (ngModelChange)="applyFilters()">
+            <label class="form-check-label" for="mobilePrice1">
+              Under $25
+            </label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="mobilePrice2"
+                   [(ngModel)]="priceFilters.from25to50" 
+                   (ngModelChange)="applyFilters()">
+            <label class="form-check-label" for="mobilePrice2">
+              $25 to $50
+            </label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="mobilePrice3"
+                   [(ngModel)]="priceFilters.from50to100" 
+                   (ngModelChange)="applyFilters()">
+            <label class="form-check-label" for="mobilePrice3">
+              $50 to $100
+            </label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="mobilePrice4"
+                   [(ngModel)]="priceFilters.over100" 
+                   (ngModelChange)="applyFilters()">
+            <label class="form-check-label" for="mobilePrice4">
+              Over $100
+            </label>
+          </div>
+        </div>
+        
+        <!-- Ratings -->
+        <div class="mb-4">
+          <h6>Customer Ratings</h6>
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="mobileRating4"
+                   [(ngModel)]="ratingFilters.fourStarsAndUp" 
+                   (ngModelChange)="applyFilters()">
+            <label class="form-check-label" for="mobileRating4">
+              <i class="bi bi-star-fill text-warning"></i>
+              <i class="bi bi-star-fill text-warning"></i>
+              <i class="bi bi-star-fill text-warning"></i>
+              <i class="bi bi-star-fill text-warning"></i>
+              <i class="bi bi-star text-warning"></i>
+              & up
+            </label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="mobileRating3"
+                   [(ngModel)]="ratingFilters.threeStarsAndUp" 
+                   (ngModelChange)="applyFilters()">
+            <label class="form-check-label" for="mobileRating3">
+              <i class="bi bi-star-fill text-warning"></i>
+              <i class="bi bi-star-fill text-warning"></i>
+              <i class="bi bi-star-fill text-warning"></i>
+              <i class="bi bi-star text-warning"></i>
+              <i class="bi bi-star text-warning"></i>
+              & up
+            </label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="mobileRating2"
+                   [(ngModel)]="ratingFilters.twoStarsAndUp" 
+                   (ngModelChange)="applyFilters()">
+            <label class="form-check-label" for="mobileRating2">
+              <i class="bi bi-star-fill text-warning"></i>
+              <i class="bi bi-star-fill text-warning"></i>
+              <i class="bi bi-star text-warning"></i>
+              <i class="bi bi-star text-warning"></i>
+              <i class="bi bi-star text-warning"></i>
+              & up
+            </label>
+          </div>
+        </div>
+        
+        <!-- Availability -->
+        <div class="mb-4">
+          <h6>Availability</h6>
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="mobileInstock"
+                   [(ngModel)]="availabilityFilters.inStock" 
+                   (ngModelChange)="applyFilters()">
+            <label class="form-check-label" for="mobileInstock">
+              In Stock
+            </label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="mobileOutofstock"
+                   [(ngModel)]="availabilityFilters.outOfStock" 
+                   (ngModelChange)="applyFilters()">
+            <label class="form-check-label" for="mobileOutofstock">
+              Out of Stock
+            </label>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" (click)="applyFilters()">Apply Filters</button>
+        <button type="button" class="btn btn-outline-secondary" (click)="resetFilters()">Reset</button>
+      </div>
+    </div>
     </div>
   </div>

@@ -4,21 +4,37 @@
   <div *ngIf="cartItems.length > 0; else noItems">
     <div class="row" *ngFor="let item of cartItems">
       <div class="col-md-8 d-flex align-items-center">
-        <img [src]="item.imageUrl" class="me-3" style="width: 50px; height: 50px; object-fit: cover;" alt="{{ item.name }}">
+        <img [src]="item.product.imageUrl" class="me-3" style="width: 50px; height: 50px; object-fit: cover;" alt="{{ item.product.name }}">
         <div>
-          <h5>{{ item.name }}</h5>
-          <p>${{ item.price }} x {{ item.quantity }}</p>
+          <h5>{{ item.product.name }}</h5>
+          <p>${{ item.product.price }} x {{ item.quantity }}</p>
         </div>
       </div>
       <div class="col-md-4 d-flex align-items-center justify-content-end">
-        <button (click)="removeFromCart(item.id)" class="btn btn-danger me-2">Remove</button>
+        <div class="input-group me-2" style="max-width: 120px;">
+          <button class="btn btn-outline-secondary" type="button" (click)="updateQuantity(item.product.id, item.quantity - 1)" [disabled]="item.quantity <= 1">-</button>
+          <span class="form-control text-center">{{ item.quantity }}</span>
+          <button class="btn btn-outline-secondary" type="button" (click)="updateQuantity(item.product.id, item.quantity + 1)">+</button>
+        </div>
+        <button (click)="removeFromCart(item.product.id)" class="btn btn-danger">Remove</button>
       </div>
     </div>
 
-    <button (click)="clearCart()" class="btn btn-warning mt-3">Clear Cart</button>
+    <div class="row mt-4">
+      <div class="col-md-8">
+        <h4>Total: ${{ getTotalPrice() | number:'1.2-2' }}</h4>
+      </div>
+      <div class="col-md-4 d-flex justify-content-end">
+        <button (click)="clearCart()" class="btn btn-warning me-2">Clear Cart</button>
+        <a routerLink="/checkout" class="btn btn-primary">Checkout</a>
+      </div>
+    </div>
   </div>
 
   <ng-template #noItems>
-    <p class="text-center">Your cart is empty.</p>
+    <div class="text-center py-5">
+      <p>Your cart is empty.</p>
+      <a routerLink="/products" class="btn btn-primary mt-3">Continue Shopping</a>
+    </div>
   </ng-template>
 </div>

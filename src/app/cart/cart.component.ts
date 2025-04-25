@@ -1,31 +1,47 @@
-import { Component, OnInit } from '@angular/core';
-import { CartService } from '../services/cart.service';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { CartService, CartItem } from '../services/cart.service';
 import { RouterLink, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-cart',
   standalone: true,
-  imports: [RouterLink,CommonModule], // No additional imports needed for this example
-  templateUrl: './cart.component.html', // External HTML file
-  styleUrls: ['./cart.component.css']   // External CSS file
+  imports: [RouterLink, CommonModule],
+  templateUrl: './cart.component.html',
+  styleUrls: ['./cart.component.css']
 })
-export class CartComponent implements OnInit {
-  cartItems: any[] = [];
+export class CartComponent implements OnInit, OnDestroy {
+  cartItems: CartItem[] = [];
+  private cartSubscription: Subscription | null = null;
 
   constructor(private cartService: CartService) {}
 
   ngOnInit(): void {
-    this.cartItems = this.cartService.getCartItems();
+    this.cartSubscription = this.cartService.cartItems$.subscribe(items => {
+      this.cartItems = items;
+    });
+  }
+
+  ngOnDestroy(): void {
+    if (this.cartSubscription) {
+      this.cartSubscription.unsubscribe();
+    }
+  }
+
+  updateQuantity(productId: number, newQuantity: number): void {
+    this.cartService.updateQuantity(productId, newQuantity);
   }
 
   removeFromCart(productId: number): void {
     this.cartService.removeFromCart(productId);
-    this.cartItems = this.cartService.getCartItems(); // Refresh the cart items
   }
 
   clearCart(): void {
     this.cartService.clearCart();
-    this.cartItems = []; // Clear the displayed cart items
+  }
+
+  getTotalPrice(): number {
+    return this.cartService.getTotalPrice();
   }
 }

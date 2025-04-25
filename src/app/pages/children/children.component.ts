@@ -1,25 +1,33 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { ProductService } from '../../services/product.service';
+import { ProductService, Product } from '../../services/product.service';
 import { CartService } from '../../services/cart.service';
 
 @Component({
   selector: 'app-children',
-  imports: [CommonModule,RouterLink], // No additional imports needed for this example
+  standalone: true,
+  imports: [CommonModule, RouterLink],
   templateUrl: './children.component.html',
-  styleUrl: './children.component.css'
+  styleUrls: ['./children.component.css']
 })
-export class ChildrenComponent {
- products: any[] = [];
+export class ChildrenComponent implements OnInit {
+  products: Product[] = [];
+  loading: boolean = true;
+
   constructor(
     private productService: ProductService,
     private cartService: CartService
   ) {}
+  
   ngOnInit(): void {
-    this.products = this.productService.getProducts().filter(product => product.category === 'Children');
+    this.productService.getProductsByCategory('Children').subscribe(products => {
+      this.products = products;
+      this.loading = false;
+    });
   }
-  addToCart(product: any): void {
+  
+  addToCart(product: Product): void {
     this.cartService.addToCart(product);
     alert(`${product.name} has been added to the cart!`);
   }

@@ -1,0 +1,148 @@
+<div class="container mt-5">
+  <div class="row">
+    <!-- Profile Sidebar -->
+    <div class="col-md-4 mb-4">
+      <div class="card shadow">
+        <div class="card-body text-center">
+          <div class="profile-image mb-3">
+            <img src="https://via.placeholder.com/150" class="rounded-circle" alt="Profile Picture" width="120">
+          </div>
+          <h4 *ngIf="currentUser">{{ currentUser.name }}</h4>
+          <p *ngIf="currentUser" class="text-muted">{{ currentUser.email }}</p>
+          <div class="d-grid gap-2 mt-4">
+            <button class="btn btn-outline-danger" (click)="logout()">
+              <i class="bi bi-box-arrow-right me-2"></i>Logout
+            </button>
+          </div>
+        </div>
+        <div class="list-group list-group-flush">
+          <a href="#profile-section" class="list-group-item list-group-item-action">
+            <i class="bi bi-person me-2"></i>Personal Information
+          </a>
+          <a href="#password-section" class="list-group-item list-group-item-action">
+            <i class="bi bi-key me-2"></i>Change Password
+          </a>
+          <a routerLink="/orders" class="list-group-item list-group-item-action">
+            <i class="bi bi-bag me-2"></i>My Orders
+          </a>
+          <a routerLink="/wishlist" class="list-group-item list-group-item-action">
+            <i class="bi bi-heart me-2"></i>My Wishlist
+          </a>
+          <a routerLink="/addresses" class="list-group-item list-group-item-action">
+            <i class="bi bi-geo-alt me-2"></i>My Addresses
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Profile Content -->
+    <div class="col-md-8">
+      <!-- Success Message -->
+      <div class="alert alert-success" *ngIf="successMessage">
+        {{ successMessage }}
+      </div>
+
+      <!-- Error Message -->
+      <div class="alert alert-danger" *ngIf="errorMessage">
+        {{ errorMessage }}
+      </div>
+
+      <!-- Personal Information Section -->
+      <div class="card shadow mb-4" id="profile-section">
+        <div class="card-header bg-white">
+          <h5 class="mb-0">Personal Information</h5>
+        </div>
+        <div class="card-body">
+          <form [formGroup]="profileForm" (ngSubmit)="onSubmitProfile()">
+            <div class="mb-3">
+              <label for="name" class="form-label">Full Name</label>
+              <input 
+                type="text" 
+                class="form-control" 
+                id="name" 
+                formControlName="name"
+                [ngClass]="{'is-invalid': profileForm.get('name')?.invalid && profileForm.get('name')?.touched}"
+              >
+              <div class="invalid-feedback" *ngIf="profileForm.get('name')?.errors?.['required'] && profileForm.get('name')?.touched">
+                Name is required
+              </div>
+            </div>
+            <div class="mb-3">
+              <label for="email" class="form-label">Email address</label>
+              <input 
+                type="email" 
+                class="form-control" 
+                id="email" 
+                formControlName="email"
+                [disabled]="true"
+              >
+              <small class="form-text text-muted">Email cannot be changed</small>
+            </div>
+            <button type="submit" class="btn btn-primary" [disabled]="profileForm.invalid || isSubmitting">
+              {{ isSubmitting ? 'Saving...' : 'Save Changes' }}
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Change Password Section -->
+      <div class="card shadow" id="password-section">
+        <div class="card-header bg-white">
+          <h5 class="mb-0">Change Password</h5>
+        </div>
+        <div class="card-body">
+          <form [formGroup]="passwordForm" (ngSubmit)="onSubmitPassword()">
+            <div class="mb-3">
+              <label for="currentPassword" class="form-label">Current Password</label>
+              <input 
+                type="password" 
+                class="form-control" 
+                id="currentPassword" 
+                formControlName="currentPassword"
+                [ngClass]="{'is-invalid': passwordForm.get('currentPassword')?.invalid && passwordForm.get('currentPassword')?.touched}"
+              >
+              <div class="invalid-feedback" *ngIf="passwordForm.get('currentPassword')?.errors?.['required'] && passwordForm.get('currentPassword')?.touched">
+                Current password is required
+              </div>
+            </div>
+            <div class="mb-3">
+              <label for="newPassword" class="form-label">New Password</label>
+              <input 
+                type="password" 
+                class="form-control" 
+                id="newPassword" 
+                formControlName="newPassword"
+                [ngClass]="{'is-invalid': passwordForm.get('newPassword')?.invalid && passwordForm.get('newPassword')?.touched}"
+              >
+              <div class="invalid-feedback" *ngIf="passwordForm.get('newPassword')?.errors?.['required'] && passwordForm.get('newPassword')?.touched">
+                New password is required
+              </div>
+              <div class="invalid-feedback" *ngIf="passwordForm.get('newPassword')?.errors?.['minlength'] && passwordForm.get('newPassword')?.touched">
+                Password must be at least 6 characters
+              </div>
+            </div>
+            <div class="mb-3">
+              <label for="confirmPassword" class="form-label">Confirm New Password</label>
+              <input 
+                type="password" 
+                class="form-control" 
+                id="confirmPassword" 
+                formControlName="confirmPassword"
+                [ngClass]="{'is-invalid': passwordForm.get('confirmPassword')?.invalid && passwordForm.get('confirmPassword')?.touched}"
+              >
+              <div class="invalid-feedback" *ngIf="passwordForm.get('confirmPassword')?.errors?.['required'] && passwordForm.get('confirmPassword')?.touched">
+                Please confirm your password
+              </div>
+              <div class="invalid-feedback" *ngIf="passwordForm.get('confirmPassword')?.errors?.['passwordMismatch'] && passwordForm.get('confirmPassword')?.touched">
+                Passwords do not match
+              </div>
+            </div>
+            <button type="submit" class="btn btn-primary" [disabled]="passwordForm.invalid || isSubmitting">
+              {{ isSubmitting ? 'Updating...' : 'Update Password' }}
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> 

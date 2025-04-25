@@ -1,1 +1,338 @@
 /* You can add global styles to this file, and also import other style files */
+
+/* Global styles for the e-commerce site */
+
+/* Modern Color Palette */
+:root {
+  --primary: #5D38C5;        /* Deep indigo purple - primary brand color */
+  --primary-light: #8371D9;  /* Lighter purple for hover states */
+  --secondary: #34D399;      /* Emerald green for accents */
+  --dark: #1F2937;           /* Dark gray for text */
+  --gray: #6B7280;           /* Medium gray for secondary text */
+  --light-gray: #F3F4F6;     /* Light gray for backgrounds */
+  --danger: #EF4444;         /* Red for danger/error states */
+  --warning: #F59E0B;        /* Amber for warnings */
+  --white: #FFFFFF;          /* White */
+  --card-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --hover-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+/* Base styles */
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
+  color: var(--dark);
+  background-color: #FAFAFA;
+  line-height: 1.5;
+}
+
+a {
+  color: var(--primary);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+a:hover {
+  color: var(--primary-light);
+}
+
+/* Button styling */
+.btn-primary {
+  background-color: var(--primary) !important;
+  border-color: var(--primary) !important;
+  color: white !important;
+  font-weight: 500;
+  transition: all 0.3s ease !important;
+}
+
+.btn-primary:hover, .btn-primary:focus {
+  background-color: var(--primary-light) !important;
+  border-color: var(--primary-light) !important;
+  box-shadow: 0 0 0 0.25rem rgba(93, 56, 197, 0.25) !important;
+}
+
+.btn-outline-primary {
+  color: var(--primary) !important;
+  border-color: var(--primary) !important;
+  background-color: transparent !important;
+  transition: all 0.3s ease !important;
+}
+
+.btn-outline-primary:hover, .btn-outline-primary:focus {
+  background-color: var(--primary) !important;
+  color: white !important;
+  box-shadow: 0 0 0 0.25rem rgba(93, 56, 197, 0.25) !important;
+}
+
+.btn-success {
+  background-color: var(--secondary) !important;
+  border-color: var(--secondary) !important;
+}
+
+.btn-danger {
+  background-color: var(--danger) !important;
+  border-color: var(--danger) !important;
+}
+
+/* Card styling */
+.card {
+  border-radius: 10px !important;
+  overflow: hidden;
+  border: none !important;
+  box-shadow: var(--card-shadow);
+  transition: transform 0.3s ease, box-shadow 0.3s ease !important;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--hover-shadow);
+}
+
+.card-title {
+  font-weight: 600;
+  color: var(--dark);
+}
+
+/* Form controls */
+.form-control {
+  border-radius: 8px;
+  border: 1px solid #E5E7EB;
+  padding: 8px 16px;
+  transition: all 0.3s ease;
+}
+
+.form-control:focus {
+  border-color: var(--primary-light);
+  box-shadow: 0 0 0 0.25rem rgba(93, 56, 197, 0.25);
+}
+
+/* Custom scrollbar for webkit browsers */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.fadeIn {
+  animation: fadeIn 0.5s ease forwards;
+}
+
+/* Global styles for navigation elements */
+.nav-tabs, .nav-pills, .nav-item, .nav-link, .dropdown-menu {
+  position: relative;
+  z-index: 7000 !important; /* Force higher z-index for all navigation elements */
+}
+
+/* Ensure content stays behind navigation */
+.card, .product-container, .item-container, .carousel, .banner {
+  z-index: 1 !important;
+}
+
+/* Explicitly set z-index for sliders */
+.slider, .carousel, .carousel-inner, .carousel-item, 
+.banner, .hero-section, .featured-section {
+  position: relative !important;
+  z-index: 5 !important; /* Higher than general content but lower than navigation */
+}
+
+/* Fix for mega menus and dropdowns */
+.mega-menu, .dropdown-menu.show {
+  z-index: 9600 !important; /* Much higher than content */
+}
+
+/* Fix for category tabs (Boys/Girls) */
+.nav-tabs {
+  position: relative;
+  z-index: 8000 !important; /* Between content and navbar */
+  background-color: #fff; /* Ensure background is solid */
+  border-bottom: 1px solid #dee2e6;
+}
+
+.nav-tabs .nav-link {
+  position: relative;
+  z-index: 8100 !important;
+  background-color: #fff;
+}
+
+/* Fix for tabs in subcategory pages */
+ul.nav-tabs, .nav-tabs .nav-item, .tab-content {
+  position: relative;
+  z-index: 8000 !important;
+}
+
+/* Ensure content appears behind tabs */
+.tab-pane {
+  position: relative;
+  z-index: 1 !important;
+}
+
+/* Additional rules to fix z-index issues */
+.container, .container-fluid, .row, .col,
+.home-container, .slider-container, .product-slider,
+.product-list, .category-products {
+  position: relative;
+  z-index: 2 !important;
+}
+
+/* Force sliders to stay below navigation */
+.carousel, .carousel-inner, .carousel-item,
+.slider, .banner-slider, .product-banner {
+  position: relative !important;
+  z-index: 4 !important;
+}
+
+/* Make images in sliders even lower in stacking context */
+.carousel-item img, .slider img, .banner img {
+  z-index: 3 !important;
+  position: relative;
+}
+
+/* Explicit stacking context rules for the entire application */
+
+/* Navigation elements are always on top */
+.navigation-wrapper,
+.navbar,
+.secondary-navbar,
+.nav-tabs,
+.nav-pills,
+.mega-menu,
+.dropdown-menu {
+  z-index: 10000 !important;
+}
+
+/* Content is always below navigation */
+.content-wrapper,
+.container,
+.row,
+.col,
+.card,
+.product-container,
+.hero-banner,
+.slider,
+.carousel,
+.banner {
+  z-index: 1 !important;
+  position: relative;
+}
+
+/* Force all content images to have low z-index */
+img,
+.img-fluid,
+.banner-image,
+.carousel-item img,
+.product-image img {
+  position: relative !important;
+  z-index: 0 !important;
+}
+
+/* Fix for secondary navbar dropdowns - COMPLETE REWRITE */
+.secondary-navbar .dropdown-menu,
+.dropdown-menu.clear-dropdown,
+.dropdown-menu.show {
+  position: fixed !important;
+  z-index: 99999999 !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  filter: none !important;
+  -webkit-filter: none !important;
+  background-color: #ffffff !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3) !important;
+  animation: none !important;
+  transform-style: flat !important;
+  /* Windows-specific fix */
+  -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#ffffff,endColorstr=#ffffff)" !important;
+}
+
+/* Ensure all dropdown contents are visible and not blurred */
+.dropdown-menu .dropdown-content,
+.dropdown-menu .dropdown-section,
+.dropdown-menu .dropdown-item,
+.dropdown-menu .dropdown-section-title,
+.dropdown-menu .dropdown-section-items,
+.dropdown-menu .dropdown-footer,
+.dropdown-menu * {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  filter: none !important;
+  -webkit-filter: none !important;
+  background-color: #ffffff !important;
+  transform-style: flat !important;
+}
+
+/* Make sure nothing else can interfere */
+.content-wrapper,
+.container,
+.row,
+.col,
+.card,
+.product-container,
+.hero-banner,
+.slider,
+.carousel,
+.banner {
+  z-index: 1 !important;
+  isolation: isolate !important;
+  transform-style: flat !important;
+}
+
+/* Ensure sliders and carousels don't create stacking contexts that trap dropdowns */
+.slider, .carousel, .carousel-inner, .carousel-item, 
+.banner, .hero-section, .featured-section,
+.product-slider, .banner-slider {
+  isolation: isolate !important;
+  transform: translateZ(0) !important;
+  z-index: 1 !important;
+}
+
+/* Ensure all dropdowns are visible */
+.dropdown-menu.show {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  filter: none !important;
+}
+
+/* Create connection between nav item and dropdown */
+.nav-item.active-category::after {
+  content: '';
+  display: block;
+  position: absolute;
+  width: 100%;
+  height: 20px;
+  bottom: -20px;
+  left: 0;
+  background-color: transparent;
+  z-index: 99999998;
+}
+
+/* Create background bridge to dropdown */
+.dropdown-menu.show::before {
+  content: '';
+  position: absolute;
+  top: -20px;
+  left: 0;
+  width: 100%;
+  height: 20px;
+  background-color: transparent;
+  z-index: 99999998;
+}

@@ -1,0 +1,32 @@
+<div class="wishlist-container">
+  <h1 class="wishlist-title">My Wishlist</h1>
+
+  <div *ngIf="isLoading" class="loading-spinner">
+    <div class="spinner"></div>
+  </div>
+
+  <div *ngIf="!isLoading && wishlistItems.length === 0" class="empty-wishlist">
+    <p>Your wishlist is empty</p>
+    <a routerLink="/products" class="browse-products-btn">Browse Products</a>
+  </div>
+
+  <div *ngIf="!isLoading && wishlistItems.length > 0" class="wishlist-grid">
+    <div *ngFor="let item of wishlistItems" class="wishlist-item">
+      <div class="item-image">
+        <img [src]="item.image" [alt]="item.name">
+      </div>
+      <div class="item-details">
+        <h3>{{ item.name }}</h3>
+        <p class="price">{{ item.price | currency }}</p>
+        <div class="item-actions">
+          <button class="remove-btn" (click)="removeFromWishlist(item.id)">
+            Remove
+          </button>
+          <a [routerLink]="['/product', item.id]" class="view-btn">
+            View Details
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

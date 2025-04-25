@@ -1,25 +1,33 @@
+import { Component, OnInit } from '@angular/core';
+import { ProductService, Product } from '../../services/product.service';
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { ProductService } from '../../services/product.service';
 import { CartService } from '../../services/cart.service';
 
 @Component({
   selector: 'app-women',
-  imports: [CommonModule,RouterLink], // No additional imports needed for this example
+  standalone: true,
+  imports: [CommonModule, RouterLink],
   templateUrl: './women.component.html',
-  styleUrl: './women.component.css'
+  styleUrls: ['./women.component.css']
 })
-export class WomenComponent {
-  products: any[] = [];
+export class WomenComponent implements OnInit {
+  products: Product[] = [];
+  loading: boolean = true;
+
   constructor(
-    private productService: ProductService,
+    private productService: ProductService, 
     private cartService: CartService
   ) {}
+
   ngOnInit(): void {
-    this.products = this.productService.getProducts().filter(product => product.category === 'Women');
+    this.productService.getProductsByCategory('Women').subscribe(products => {
+      this.products = products;
+      this.loading = false;
+    });
   }
-  addToCart(product: any): void {
+  
+  addToCart(product: Product): void {
     this.cartService.addToCart(product);
     alert(`${product.name} has been added to the cart!`);
   }

@@ -1,36 +1,79 @@
 import { Component, OnInit } from '@angular/core';
-import { ProductService } from '../services/product.service';
+import { ProductService, Product, Category } from '../services/product.service';
 import { CartService } from '../services/cart.service';
 import { RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { Observable, forkJoin, map, tap } from 'rxjs';
+
+interface CategoryProducts {
+  categoryName: string;
+  products: Product[];
+}
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [RouterLink,CommonModule], // No additional imports needed for this example
-  templateUrl: './home.component.html', // External HTML file
-  styleUrls: ['./home.component.css']   // External CSS file
+  imports: [RouterLink, CommonModule],
+  templateUrl: './home.component.html',
+  styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
-  productsByCategory: { [key: string]: any[] } = {};
-  categories: string[] = [];
+  productsByCategory: { [key: string]: Product[] } = {};
+  categories: Category[] = [];
+  isLoading = true;
+  
+  featuredProducts$: Observable<Product[]>;
+  categories$: Observable<Category[]>;
 
   constructor(
     private productService: ProductService,
     private cartService: CartService
-  ) {}
+  ) {
+    this.featuredProducts$ = this.productService.getFeaturedProducts(8);
+    
+    this.categories$ = this.productService.getCategories().pipe(
+      tap(categories => {
+        this.categories = categories;
+        this.isLoading = false;
+      })
+    );
+  }
 
   ngOnInit(): void {
-    const products = this.productService.getProducts();
-    this.categories = this.productService.getCategories();
+    this.loadCategoryProducts();
+  }
 
-    this.categories.forEach(category => {
-      this.productsByCategory[category] = products.filter(product => product.category === category);
+  loadCategoryProducts(): void {
+    this.categories$.subscribe(categories => {
+      // Create observables for each category's products
+      const categoryObservables: Observable<CategoryProducts>[] = categories.map(category => {
+        return this.productService.getProductsByCategory(category.name).pipe(
+          map(products => ({ 
+            categoryName: category.name, 
+            products: products 
+          }))
+        );
+      });
+      
+      // Use forkJoin to wait for all observables to complete
+      forkJoin(categoryObservables).subscribe(results => {
+        results.forEach(result => {
+          this.productsByCategory[result.categoryName] = result.products;
+        });
+      });
     });
   }
 
-  addToCart(product: any): void {
+  addToCart(product: Product): void {
     this.cartService.addToCart(product);
     alert(`${product.name} has been added to the cart!`);
+  }
+
+  trackByProduct(index: number, product: Product): number {
+    return product.id;
+  }
+
+  trackByCategory(index: number, category: Category): number {
+    return category.id;
   }
 }

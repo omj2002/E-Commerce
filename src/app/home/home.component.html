@@ -1,16 +1,119 @@
-<div *ngFor="let category of categories" class="mt-4">
-  <h2>{{ category }}</h2>
-  <div class="row">
-    <div *ngFor="let product of productsByCategory[category]" class="col-md-4 mb-4">
-      <div class="card">
-        <img [src]="product.imageUrl" class="card-img-top" alt="{{ product.name }}">
-        <div class="card-body">
-          <h5 class="card-title">{{ product.name }}</h5>
-          <p class="card-text">{{ product.description }}</p>
-          <p class="card-text text-primary fw-bold">${{ product.price }}</p>
-          <div class="d-flex justify-content-between align-items-center">
-            <a [routerLink]="['/products', product.id]" class="btn btn-primary">View Details</a>
-            <button (click)="addToCart(product)" class="btn btn-success">Add to Cart</button>
+<!-- Hero Banner Section with proper structure for dropdown compatibility -->
+<div class="hero-banner-wrapper">
+  <div class="hero-banner">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-md-6">
+          <h1 class="display-4 fw-bold">Welcome to Jadhav Store</h1>
+          <p class="lead">Discover amazing products at great prices</p>
+          <a routerLink="/products" class="btn btn-primary btn-lg mt-3">Shop Now</a>
+        </div>
+        <div class="col-md-6">
+          <img src="assets/images/banner.jpg" alt="Shop banner" class="img-fluid rounded banner-image">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container mt-5">
+  <!-- Loading Indicator -->
+  <div *ngIf="isLoading" class="text-center my-5 py-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+    <p class="mt-3 text-gray">Loading products...</p>
+  </div>
+
+  <!-- Featured Products Section -->
+  <div *ngIf="!isLoading" class="mb-5 fadeIn">
+    <h2 class="section-title">Featured Products</h2>
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
+      <div *ngFor="let product of featuredProducts$ | async; trackBy: trackByProduct" class="col">
+        <div class="card h-100 product-card">
+          <div class="product-image">
+            <img [src]="product.imageUrl" class="card-img-top" alt="{{ product.name }}">
+            <div class="product-actions">
+              <button class="btn" title="Add to Wishlist">
+                <i class="bi bi-heart"></i>
+              </button>
+              <button class="btn" title="Quick View">
+                <i class="bi bi-eye"></i>
+              </button>
+            </div>
+          </div>
+          <div class="card-body d-flex flex-column">
+            <div class="mb-2">
+              <span class="badge bg-light text-dark me-2">{{ product.category }}</span>
+              <span *ngIf="product.rating" class="text-warning">
+                <i class="bi bi-star-fill"></i> {{ product.rating }}
+              </span>
+            </div>
+            <h5 class="card-title text-truncate">{{ product.name }}</h5>
+            <p class="card-text">{{ product.description | slice:0:60 }}{{ product.description.length > 60 ? '...' : '' }}</p>
+            <div class="mt-auto">
+              <p class="price mb-3">${{ product.price }}</p>
+              <div class="d-grid gap-2">
+                <a [routerLink]="['/products', product.id]" class="btn btn-outline-primary">Details</a>
+                <button (click)="addToCart(product)" class="btn btn-primary btn-add-to-cart">
+                  <i class="bi bi-cart-plus me-2"></i>Add to Cart
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Category Sections -->
+  <div *ngIf="!isLoading" class="fadeIn">
+    <div *ngFor="let category of categories$ | async; trackBy: trackByCategory" class="mb-5">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="section-title">{{ category.name }}</h2>
+        <a [routerLink]="['/category', category.name]" class="btn btn-outline-primary">
+          View All <i class="bi bi-arrow-right ms-1"></i>
+        </a>
+      </div>
+      
+      <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
+        <div *ngFor="let product of productsByCategory[category.name]?.slice(0, 4); trackBy: trackByProduct" class="col">
+          <div *ngIf="product" class="card h-100 product-card">
+            <div class="product-image">
+              <img [src]="product.imageUrl" class="card-img-top" alt="{{ product.name }}">
+              <div class="product-actions">
+                <button class="btn" title="Add to Wishlist">
+                  <i class="bi bi-heart"></i>
+                </button>
+                <button class="btn" title="Quick View">
+                  <i class="bi bi-eye"></i>
+                </button>
+              </div>
+            </div>
+            <div class="card-body d-flex flex-column">
+              <div class="mb-2">
+                <span class="badge bg-light text-dark me-2">{{ product.subcategory }}</span>
+                <span *ngIf="product.rating" class="text-warning">
+                  <i class="bi bi-star-fill"></i> {{ product.rating }}
+                </span>
+              </div>
+              <h5 class="card-title text-truncate">{{ product.name }}</h5>
+              <p class="card-text">{{ product.description | slice:0:60 }}{{ product.description.length > 60 ? '...' : '' }}</p>
+              <div class="mt-auto">
+                <p class="price mb-3">${{ product.price }}</p>
+                <div class="d-grid gap-2">
+                  <a [routerLink]="['/products', product.id]" class="btn btn-outline-primary">Details</a>
+                  <button (click)="addToCart(product)" class="btn btn-primary btn-add-to-cart">
+                    <i class="bi bi-cart-plus me-2"></i>Add to Cart
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Empty card placeholder if product is undefined -->
+          <div *ngIf="!product" class="placeholder-card">
+            <p>No products available</p>
           </div>
         </div>
       </div>

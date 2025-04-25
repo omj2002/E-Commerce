@@ -1,41 +1,115 @@
 <div class="secondary-navbar">
-  <button class="menu-toggle" (click)="toggleMobileMenu()" *ngIf="isMobile">
-    <i class="bi bi-list"></i>
-  </button>
-  <div class="nav-container" #navContainer>
-    <button class="scroll-button scroll-left" (click)="scrollLeft()" *ngIf="!isMobile">
-      <i class="bi bi-chevron-left"></i>
+  <div class="container">
+    <button class="menu-toggle" *ngIf="isMobile" (click)="toggleMobileMenu()">
+      <i class="bi bi-grid"></i> Categories
     </button>
-    <ul class="nav" [class.show]="showMobileMenu">
-      <li *ngFor="let category of navigationData" 
-          class="nav-item"
-          (mouseenter)="!isMobile && (activeDropdown = category.category)"
-          (mouseleave)="!isMobile && (activeDropdown = null)">
-        <a class="nav-link" 
-           (click)="toggleDropdown(category.category, $event)">
-          {{ category.category }}
-          <i class="bi bi-chevron-down nav-arrow" [class.rotate]="activeDropdown === category.category"></i>
-        </a>
-        <div class="dropdown-menu" [class.show]="activeDropdown === category.category" #dropdownMenu>
-          <div class="dropdown-content">
-            <div *ngFor="let section of category.sections" class="dropdown-section">
-              <div class="dropdown-section-title">{{ section.title }}</div>
-              <ul class="dropdown-section-items">
-                <li *ngFor="let item of section.items">
-                  <a [routerLink]="['/category', category.category, item]" 
-                     class="dropdown-item"
-                     (click)="closeDropdownAndMenu()">
-                    {{ item }}
-                  </a>
-                </li>
-              </ul>
+
+    <div class="nav-overlay" [class.show]="mobileMenuOpen || showOverlay" (click)="closeMobileMenu()"></div>
+
+    <div class="nav-container" [class.show]="mobileMenuOpen">
+      <div class="mobile-menu-header" *ngIf="isMobile">
+        <span class="mobile-menu-title">Browse Categories</span>
+        <button class="menu-close" (click)="closeMobileMenu()">
+          <i class="bi bi-x-lg"></i>
+        </button>
+      </div>
+
+      <div *ngIf="isLoading" class="nav-loading">
+        <div class="spinner-border text-primary spinner-sm" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+        <span class="ms-2">Loading categories...</span>
+      </div>
+
+      <ul *ngIf="!isLoading && categories.length > 0" class="nav">
+        <li *ngFor="let category of categories" 
+            class="nav-item"
+            [class.active-category]="activeCategoryId === category.id"
+            [attr.data-category-id]="category.id"
+            (mouseenter)="!isMobile && onMouseEnter(category.id)"
+            (mouseleave)="!isMobile && onMouseLeave(category.id)">
+          <a class="nav-link" 
+             [class.active]="activeCategoryId === category.id"
+             (click)="toggleCategory($event, category.id)">
+            {{ category.name }}
+            <i class="nav-icon bi bi-chevron-{{ activeCategoryId === category.id ? 'up' : 'down' }}"></i>
+          </a>
+          
+          <!-- Mobile-only dropdowns (rendered inline) -->
+          <div *ngIf="isMobile" class="dropdown-menu mobile-dropdown"
+               [class.show]="activeCategoryId === category.id">
+            <div class="dropdown-content clear-content">
+              <div *ngFor="let section of category.sections" class="dropdown-section">
+                <h5 class="dropdown-section-title">
+                  <i class="section-icon bi bi-tag-fill"></i>
+                  {{ section.name }}
+                </h5>
+                <ul class="dropdown-section-items">
+                  <li *ngFor="let item of section.items">
+                    <a class="dropdown-item" 
+                       [routerLink]="['/category', category.id, getSectionUrlName(section.name)]"
+                       (click)="onNavigationLinkClick()">
+                      <i class="bi bi-dot"></i> {{ item.name }}
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div class="dropdown-footer">
+              <a [routerLink]="['/category', category.id]" class="view-all" (click)="onNavigationLinkClick()">
+                View All {{ category.name }} <i class="bi bi-arrow-right"></i>
+              </a>
             </div>
           </div>
-        </div>
-      </li>
-    </ul>
-    <button class="scroll-button scroll-right" (click)="scrollRight()" *ngIf="!isMobile">
-      <i class="bi bi-chevron-right"></i>
-    </button>
+        </li>
+      </ul>
+
+      <div *ngIf="!isLoading && categories.length === 0" class="no-categories">
+        <i class="bi bi-exclamation-circle text-muted"></i>
+        <span class="ms-2">No categories available</span>
+      </div>
+    </div>
   </div>
-</div><div class="nav-overlay" [class.show]="showMobileMenu" (click)="closeMobileMenu()"></div>
+</div>
+
+<!-- Dropdown menus rendered outside of the navbar for better stacking context (desktop only) -->
+<ng-container *ngIf="!isMobile">
+  <div *ngFor="let category of categories" 
+       class="dropdown-menu clear-dropdown" 
+       [attr.data-category-id]="category.id"
+       style="filter: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important;"
+       [class.show]="activeCategoryId === category.id"
+       (mouseenter)="onDropdownMouseEnter(category.id)"
+       (mouseleave)="onDropdownMouseLeave(category.id)">
+    <div class="dropdown-content clear-content" 
+         style="background-color: #ffffff !important; filter: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important;">
+      <div *ngFor="let section of category.sections" class="dropdown-section"
+           style="background-color: #ffffff !important; filter: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important;">
+        <h5 class="dropdown-section-title"
+            style="background-color: #ffffff !important; filter: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important;">
+          <i class="section-icon bi bi-tag-fill"></i>
+          {{ section.name }}
+        </h5>
+        <ul class="dropdown-section-items"
+            style="background-color: #ffffff !important; filter: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important;">
+          <li *ngFor="let item of section.items">
+            <a class="dropdown-item" 
+               [routerLink]="['/category', category.id, getSectionUrlName(section.name)]"
+               (click)="onNavigationLinkClick()"
+               style="background-color: #ffffff !important; filter: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important;">
+              <i class="bi bi-dot"></i> {{ item.name }}
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="dropdown-footer"
+         style="background-color: #f9f9f9 !important; filter: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important;">
+      <a [routerLink]="['/category', category.id]" 
+         class="view-all"
+         (click)="onNavigationLinkClick()">
+        View All {{ category.name }} <i class="bi bi-arrow-right"></i>
+      </a>
+    </div>
+  </div>
+</ng-container>
