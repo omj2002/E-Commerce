@@ -1,0 +1,396 @@
+{
+  "categories": [
+    {
+      "id": 1,
+      "name": "Men",
+      "imageUrl": "https://via.placeholder.com/300x200?text=Men",
+      "subcategories": [
+        {
+          "id": 101,
+          "name": "Top Wear",
+          "items": [
+            "T-Shirts",
+            "Shirts",
+            "Polo Shirts",
+            "Kurtas"
+          ]
+        },
+        {
+          "id": 102,
+          "name": "Bottom Wear",
+          "items": [
+            "Jeans",
+            "Trousers",
+            "Shorts",
+            "Track Pants"
+          ]
+        },
+        {
+          "id": 103,
+          "name": "Footwear",
+          "items": [
+            "Casual Shoes",
+            "Sports Shoes",
+            "Formal Shoes",
+            "Sandals"
+          ]
+        },
+        {
+          "id": 104,
+          "name": "Accessories",
+          "items": [
+            "Watches",
+            "Belts",
+            "Sunglasses",
+            "Wallets"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Women",
+      "imageUrl": "https://via.placeholder.com/300x200?text=Women",
+      "subcategories": [
+        {
+          "id": 201,
+          "name": "Top Wear",
+          "items": [
+            "Tops",
+            "T-Shirts",
+            "Shirts",
+            "Blouses"
+          ]
+        },
+        {
+          "id": 202,
+          "name": "Bottom Wear",
+          "items": [
+            "Jeans",
+            "Skirts",
+            "Trousers",
+            "Leggings"
+          ]
+        },
+        {
+          "id": 203,
+          "name": "Dresses",
+          "items": [
+            "Casual Dresses",
+            "Party Dresses",
+            "Midi Dresses",
+            "Maxi Dresses"
+          ]
+        },
+        {
+          "id": 204,
+          "name": "Footwear",
+          "items": [
+            "Flats",
+            "Heels",
+            "Boots",
+            "Sandals"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Women Ethnic",
+      "imageUrl": "https://via.placeholder.com/300x200?text=Women+Ethnic",
+      "subcategories": [
+        {
+          "id": 301,
+          "name": "Sarees",
+          "items": [
+            "Silk Sarees",
+            "Cotton Sarees",
+            "Georgette Sarees",
+            "Chiffon Sarees"
+          ]
+        },
+        {
+          "id": 302,
+          "name": "Kurtis",
+          "items": [
+            "Anarkali Kurtis",
+            "Rayon Kurtis",
+            "Cotton Kurtis",
+            "Embroidered Kurtis"
+          ]
+        },
+        {
+          "id": 303,
+          "name": "Kurta Sets",
+          "items": [
+            "Printed Kurta Sets",
+            "Embroidered Kurta Sets",
+            "Cotton Kurta Sets"
+          ]
+        },
+        {
+          "id": 304,
+          "name": "Ethnic Bottomwear",
+          "items": [
+            "Leggings",
+            "Palazzos",
+            "Salwars",
+            "Churidars"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Children",
+      "imageUrl": "https://via.placeholder.com/300x200?text=Children",
+      "subcategories": [
+        {
+          "id": 401,
+          "name": "Boys",
+          "items": [
+            "T-shirts",
+            "Shirts",
+            "Jeans",
+            "Shorts"
+          ]
+        },
+        {
+          "id": 402,
+          "name": "Girls",
+          "items": [
+            "Dresses",
+            "Tops",
+            "Jeans",
+            "Skirts"
+          ]
+        },
+        {
+          "id": 403,
+          "name": "Footwear",
+          "items": [
+            "Boys Shoes",
+            "Girls Shoes",
+            "Sandals",
+            "Sports Shoes"
+          ]
+        },
+        {
+          "id": 404,
+          "name": "Toys",
+          "items": [
+            "Soft Toys",
+            "Educational Toys",
+            "Action Figures",
+            "Board Games"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "name": "Electronics",
+      "imageUrl": "https://via.placeholder.com/300x200?text=Electronics",
+      "subcategories": [
+        {
+          "id": 501,
+          "name": "Mobile Phones",
+          "items": [
+            "Smartphones",
+            "Feature Phones",
+            "Tablets"
+          ]
+        },
+        {
+          "id": 502,
+          "name": "Computers",
+          "items": [
+            "Laptops",
+            "Desktops",
+            "Monitors",
+            "Peripherals"
+          ]
+        },
+        {
+          "id": 503,
+          "name": "Audio",
+          "items": [
+            "Headphones",
+            "Earphones",
+            "Speakers",
+            "Soundbars"
+          ]
+        },
+        {
+          "id": 504,
+          "name": "Accessories",
+          "items": [
+            "Phone Cases",
+            "Chargers",
+            "Power Banks",
+            "Memory Cards"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "name": "Home & Kitchen",
+      "imageUrl": "https://via.placeholder.com/300x200?text=Home+Kitchen",
+      "subcategories": [
+        {
+          "id": 601,
+          "name": "Home Furnishing",
+          "items": [
+            "Bedsheets",
+            "Curtains",
+            "Cushions",
+            "Towels"
+          ]
+        },
+        {
+          "id": 602,
+          "name": "Kitchen",
+          "items": [
+            "Cookware",
+            "Serveware",
+            "Kitchen Tools",
+            "Storage"
+          ]
+        },
+        {
+          "id": 603,
+          "name": "Home Decor",
+          "items": [
+            "Wall Decor",
+            "Clocks",
+            "Photo Frames",
+            "Vases"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "name": "Beauty & Health",
+      "imageUrl": "https://via.placeholder.com/300x200?text=Beauty+Health",
+      "subcategories": [
+        {
+          "id": 701,
+          "name": "Makeup",
+          "items": [
+            "Face",
+            "Eyes",
+            "Lips",
+            "Nails"
+          ]
+        },
+        {
+          "id": 702,
+          "name": "Skincare",
+          "items": [
+            "Moisturizers",
+            "Cleansers",
+            "Sunscreen",
+            "Face Masks"
+          ]
+        },
+        {
+          "id": 703,
+          "name": "Haircare",
+          "items": [
+            "Shampoo",
+            "Conditioner",
+            "Hair Oil",
+            "Styling"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "name": "Jewellery & Accessories",
+      "imageUrl": "https://via.placeholder.com/300x200?text=Jewellery",
+      "subcategories": [
+        {
+          "id": 801,
+          "name": "Jewellery",
+          "items": [
+            "Necklaces & Chains",
+            "Earrings",
+            "Rings",
+            "Bracelets"
+          ]
+        },
+        {
+          "id": 802,
+          "name": "Watches",
+          "items": [
+            "Men's Watches",
+            "Women's Watches",
+            "Smart Watches", 
+            "Luxury Watches",
+            "Sports Watches"
+          ]
+        },
+        {
+          "id": 803,
+          "name": "Accessories",
+          "items": [
+            "Sunglasses",
+            "Belts",
+            "Scarves",
+            "Hair Accessories"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "name": "Bags & Footwear",
+      "imageUrl": "https://via.placeholder.com/300x200?text=Bags+Footwear",
+      "subcategories": [
+        {
+          "id": 901,
+          "name": "Women Bags",
+          "items": [
+            "Handbags",
+            "Sling Bags",
+            "Tote Bags",
+            "Wallets"
+          ]
+        },
+        {
+          "id": 902,
+          "name": "Men Bags",
+          "items": [
+            "Backpacks",
+            "Laptop Bags",
+            "Messenger Bags",
+            "Wallets"
+          ]
+        },
+        {
+          "id": 903,
+          "name": "Men Footwear",
+          "items": [
+            "Casual Shoes",
+            "Formal Shoes",
+            "Sports Shoes",
+            "Sandals"
+          ]
+        },
+        {
+          "id": 904,
+          "name": "Women Footwear",
+          "items": [
+            "Flats",
+            "Heels",
+            "Boots",
+            "Sandals"
+          ]
+        }
+      ]
+    }
+  ]
+} 
